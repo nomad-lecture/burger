@@ -116,7 +116,10 @@ class BurgerPage extends Component {
           )}
         </Modal>
         {this.state.loading && <Spinner />}
-        <Burger ingredients={this.state.ingredients} />
+        <Burger
+          ingredients={this.state.ingredients}
+          choose={this.props.choose}
+        />
         <BuildControls
           ingredientsNames={INGERIENT_NAMES}
           price={this.state.totalPrice}
