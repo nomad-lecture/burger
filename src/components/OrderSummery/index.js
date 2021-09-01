@@ -15,8 +15,8 @@ const OrderSummery = (props) => {
       </ul>
       <strong>Your Total Price : {props.totalPrice} MNT </strong>
       <p>go to next step ?</p>
-      <Button text="decline" />
-      <Button text="continue" />
+      <Button clicked={props.onCancel} btnType="Danger" text="Decline" />
+      <Button clicked={props.onContinue} btnType="Success" text="Continue" />
     </div>
   );
 };

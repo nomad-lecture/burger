@@ -4,6 +4,8 @@ import BuildControls from "../../components/BuildControls";
 import Modal from "../../components/General/Modal";
 import OrderSummery from "../../components/OrderSummery";
 
+import Spinner from "../../components/General/Spinner";
+
 const INGERIENT_PRICES = {
   salad: 150,
   cheese: 250,
@@ -17,7 +19,7 @@ const INGERIENT_NAMES = {
   salad: "Salad",
 };
 
-export default class BurgerPage extends Component {
+class BurgerPage extends Component {
   state = {
     ingredients: {
       salad: 0,
@@ -28,7 +30,11 @@ export default class BurgerPage extends Component {
     totalPrice: 0,
     purchasing: false,
     confirmOrder: false,
+    lastCustomerName: "N/A",
+    loading: false,
   };
+
+  componentDidMount = () => {};
 
   addEvent = (type) => {
     const newIngredients = { ...this.state.ingredients };
@@ -67,24 +73,49 @@ export default class BurgerPage extends Component {
     this.setState({ confirmOrder: false });
   };
 
+  continueOrder = () => {
+    const params = [];
+
+    for (let ingredient in this.state.ingredients) {
+      params.push(ingredient + "=" + this.state.ingredients[ingredient]);
+    }
+
+    params.push("totalPrice=" + this.state.totalPrice);
+
+    this.props.history.push({
+      pathname: "/shipping",
+      search: params.join("&"),
+    });
+
+    this.closeConfirmModal();
+  };
+
   render() {
     const disabledIngredients = { ...this.state.ingredients };
 
     for (let key in disabledIngredients) {
       disabledIngredients[key] = disabledIngredients[key] <= 0;
     }
+
     return (
       <div>
         <Modal
           closeConfirmModal={this.closeConfirmModal}
           show={this.state.confirmOrder}
         >
-          <OrderSummery
-            ingredients={this.state.ingredients}
-            ingredientsNames={INGERIENT_NAMES}
-            totalPrice={this.state.totalPrice}
-          />
+          {this.state.loading ? (
+            <Spinner />
+          ) : (
+            <OrderSummery
+              onCancel={this.closeConfirmModal}
+              onContinue={this.continueOrder}
+              ingredients={this.state.ingredients}
+              ingredientsNames={INGERIENT_NAMES}
+              totalPrice={this.state.totalPrice}
+            />
+          )}
         </Modal>
+        {this.state.loading && <Spinner />}
         <Burger ingredients={this.state.ingredients} />
         <BuildControls
           ingredientsNames={INGERIENT_NAMES}
@@ -99,3 +130,5 @@ export default class BurgerPage extends Component {
     );
   }
 }
+
+export default BurgerPage;
