@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import Burger from "../../components/Burger";
 import BuildControls from "../../components/BuildControls";
 import Modal from "../../components/General/Modal";
@@ -97,6 +98,8 @@ class BurgerPage extends Component {
       disabledIngredients[key] = disabledIngredients[key] <= 0;
     }
 
+    console.log("hey", this.props);
+
     return (
       <div>
         <Modal
@@ -134,4 +137,19 @@ class BurgerPage extends Component {
   }
 }
 
-export default BurgerPage;
+const a = (state) => {
+  return {
+    ingredients: state.ingredients,
+    totalPrice: state.totalPrice,
+  };
+};
+
+const b = (dispatch) => {
+  return {
+    addIngredient: (ingredientName) => dispatch({ type: "ADD_INGREDIENT" }),
+    removeIngredient: (ingredientName) =>
+      dispatch({ type: "REMOVE_INGREDIENT" }),
+  };
+};
+
+export default connect(a, b)(BurgerPage);
