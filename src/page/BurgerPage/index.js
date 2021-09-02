@@ -6,6 +6,7 @@ import Modal from "../../components/General/Modal";
 import OrderSummery from "../../components/OrderSummery";
 
 import Spinner from "../../components/General/Spinner";
+import * as actions from "../../redux/actions/burgerAction";
 
 const INGERIENT_PRICES = {
   salad: 150,
@@ -22,26 +23,18 @@ const INGERIENT_NAMES = {
 
 class BurgerPage extends Component {
   state = {
-    ingredients: {
-      salad: 0,
-      cheese: 0,
-      bacon: 0,
-      meat: 0,
-    },
-    totalPrice: 0,
     purchasing: false,
     confirmOrder: false,
-    lastCustomerName: "N/A",
     loading: false,
   };
 
   componentDidMount = () => {};
 
   addEvent = (type) => {
-    const newIngredients = { ...this.state.ingredients };
+    const newIngredients = { ...this.props.ingredients };
     newIngredients[type]++;
 
-    const newPrice = this.state.totalPrice + INGERIENT_PRICES[type];
+    const newPrice = this.props.totalPrice + INGERIENT_PRICES[type];
 
     this.setState({
       ingredients: newIngredients,
@@ -51,14 +44,14 @@ class BurgerPage extends Component {
   };
 
   deleteEvent = (type) => {
-    const newIngredients = { ...this.state.ingredients };
+    const newIngredients = { ...this.props.ingredients };
     let count = newIngredients[type] - 1;
     if (count <= 0) {
       count = 0;
     }
     newIngredients[type] = count;
 
-    const newPrice = this.state.totalPrice - INGERIENT_PRICES[type];
+    const newPrice = this.props.totalPrice - INGERIENT_PRICES[type];
     this.setState({
       ingredients: newIngredients,
       totalPrice: newPrice,
@@ -77,11 +70,11 @@ class BurgerPage extends Component {
   continueOrder = () => {
     const params = [];
 
-    for (let ingredient in this.state.ingredients) {
-      params.push(ingredient + "=" + this.state.ingredients[ingredient]);
+    for (let ingredient in this.props.ingredients) {
+      params.push(ingredient + "=" + this.props.ingredients[ingredient]);
     }
 
-    params.push("totalPrice=" + this.state.totalPrice);
+    params.push("totalPrice=" + this.props.totalPrice);
 
     this.props.history.push({
       pathname: "/shipping",
@@ -92,13 +85,11 @@ class BurgerPage extends Component {
   };
 
   render() {
-    const disabledIngredients = { ...this.state.ingredients };
+    const disabledIngredients = { ...this.props.ingredients };
 
     for (let key in disabledIngredients) {
       disabledIngredients[key] = disabledIngredients[key] <= 0;
     }
-
-    console.log("hey", this.props);
 
     return (
       <div>
@@ -112,23 +103,20 @@ class BurgerPage extends Component {
             <OrderSummery
               onCancel={this.closeConfirmModal}
               onContinue={this.continueOrder}
-              ingredients={this.state.ingredients}
+              ingredients={this.props.ingredients}
               ingredientsNames={INGERIENT_NAMES}
-              totalPrice={this.state.totalPrice}
+              totalPrice={this.props.totalPrice}
             />
           )}
         </Modal>
         {this.state.loading && <Spinner />}
-        <Burger
-          ingredients={this.state.ingredients}
-          choose={this.props.choose}
-        />
+        <Burger ingredients={this.props.ingredients} />
         <BuildControls
           ingredientsNames={INGERIENT_NAMES}
-          price={this.state.totalPrice}
+          price={this.props.totalPrice}
           disabledIngredients={disabledIngredients}
-          addEvent={this.addEvent}
-          deleteEvent={this.deleteEvent}
+          addEvent={this.props.addIngredient}
+          deleteEvent={this.props.removeIngredient}
           disabledOrder={!this.state.purchasing}
           showConfirmModal={this.showConfirmModal}
         />
@@ -137,19 +125,19 @@ class BurgerPage extends Component {
   }
 }
 
-const a = (state) => {
+const mapStateToProps = (state) => {
   return {
     ingredients: state.ingredients,
     totalPrice: state.totalPrice,
   };
 };
 
-const b = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    addIngredient: (ingredientName) => dispatch({ type: "ADD_INGREDIENT" }),
-    removeIngredient: (ingredientName) =>
-      dispatch({ type: "REMOVE_INGREDIENT" }),
+    addIngredient: (ingredient) => dispatch(actions.addIngredient(ingredient)),
+    removeIngredient: (ingredient) =>
+      dispatch(actions.removeIngredient(ingredient)),
   };
 };
 
-export default connect(a, b)(BurgerPage);
+export default connect(mapStateToProps, mapDispatchToProps)(BurgerPage);
