@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import Button from "../General/Button";
 import css from "./style.module.css";
 import axios from "../../axios-orders";
@@ -52,7 +53,6 @@ class ContactData extends Component {
   };
 
   render() {
-    console.log(this.props);
     return (
       <div className={css.ContactData}>
         Total Price : {this.props.totalPrice}
@@ -86,4 +86,11 @@ class ContactData extends Component {
   }
 }
 
-export default withRouter(ContactData);
+const mapStateToProps = (state) => {
+  return {
+    totalPrice: state.totalPrice,
+    ingredients: state.ingredients,
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(ContactData));

@@ -21,20 +21,7 @@ class BurgerPage extends Component {
   };
 
   continueOrder = () => {
-    const params = [];
-
-    for (let ingredient in this.props.ingredients) {
-      params.push(ingredient + "=" + this.props.ingredients[ingredient]);
-    }
-
-    params.push("totalPrice=" + this.props.totalPrice);
-
-    this.props.history.push({
-      pathname: "/shipping",
-      search: params.join("&"),
-    });
-
-    this.closeConfirmModal();
+    this.props.history.push("/shipping");
   };
 
   render() {
