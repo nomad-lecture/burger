@@ -6,6 +6,13 @@ const initialState = {
     bacon: 0,
   },
   totalPrice: 0,
+  purchasing: false,
+  ingredientNames: {
+    bacon: "Bacon",
+    cheese: "Cheese",
+    meat: "Meat",
+    salad: "Salad",
+  },
 };
 
 const INGERIENT_PRICES = {
@@ -18,19 +25,24 @@ const INGERIENT_PRICES = {
 const reducer = (state = initialState, action) => {
   if (action.type === "ADD_INGREDIENT") {
     return {
+      ...state,
       ingredients: {
         ...state.ingredients,
         [action.ingredient]: state.ingredients[action.ingredient] + 1,
       },
       totalPrice: state.totalPrice + INGERIENT_PRICES[action.ingredient],
+      purchasing: true,
     };
   } else if (action.type === "REMOVE_INGREDIENT") {
+    const newPrice = state.totalPrice - INGERIENT_PRICES[action.ingredient];
     return {
+      ...state,
       ingredients: {
         ...state.ingredients,
         [action.ingredient]: state.ingredients[action.ingredient] - 1,
       },
-      totalPrice: state.totalPrice - INGERIENT_PRICES[action.ingredient],
+      totalPrice: newPrice,
+      purchasing: newPrice > 0,
     };
   }
 
