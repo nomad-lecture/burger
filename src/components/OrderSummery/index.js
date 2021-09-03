@@ -25,9 +25,9 @@ const OrderSummery = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
-    ingredientNames: state.ingredientNames,
-    totalPrice: state.totalPrice,
+    ingredients: state.burgerReducer.ingredients,
+    ingredientNames: state.burgerReducer.ingredientNames,
+    totalPrice: state.burgerReducer.totalPrice,
   };
 };
 
