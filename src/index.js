@@ -5,7 +5,7 @@ import App from "./page/App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import burgerReducer from "./redux/reducer/burgerReducer";
 
@@ -21,7 +21,12 @@ const logger = (store) => {
   };
 };
 
-const store = createStore(burgerReducer, applyMiddleware(logger));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(
+  burgerReducer,
+  composeEnhancers(applyMiddleware(logger))
+);
 
 ReactDOM.render(
   <Provider store={store}>
