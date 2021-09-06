@@ -2,17 +2,25 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Button from "../General/Button";
 import css from "./style.module.css";
-import axios from "../../axios-orders";
 import Spinner from "../General/Spinner";
 import { withRouter } from "react-router-dom";
+import * as actions from "../../redux/actions/orderAction";
 
 class ContactData extends Component {
   state = {
     name: null,
     city: null,
     street: null,
-    loading: false,
   };
+
+  componentDidUpdate() {
+    if (
+      this.props.newOrderStatus.finished &&
+      !this.props.newOrderStatus.error
+    ) {
+      this.props.history.replace("/orders");
+    }
+  }
 
   changeName = (e) => {
     this.setState({ name: e.target.value });
@@ -27,7 +35,6 @@ class ContactData extends Component {
   };
 
   saveOrder = () => {
-    this.setState({ loading: true });
     const order = {
       ingredients: this.props.ingredients,
       totalPrice: this.props.totalPrice,
@@ -38,25 +45,18 @@ class ContactData extends Component {
       },
     };
 
-    axios
-      .post("orders.json", order)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        this.setState({ loading: false });
-        this.props.history.replace("/orders");
-      });
+    this.props.saveOrderAction(order);
   };
 
   render() {
     return (
       <div className={css.ContactData}>
         Total Price : {this.props.totalPrice}
-        {this.state.loading ? (
+        <div>
+          {this.props.newOrderStatus.error &&
+            `Order save process failed : ${this.props.newOrderStatus.error}`}
+        </div>
+        {this.props.newOrderStatus.saving ? (
           <Spinner />
         ) : (
           <div>
@@ -90,7 +90,17 @@ const mapStateToProps = (state) => {
   return {
     totalPrice: state.burgerReducer.totalPrice,
     ingredients: state.burgerReducer.ingredients,
+    newOrderStatus: state.orderReducer.newOrderStatus,
   };
 };
 
-export default connect(mapStateToProps)(withRouter(ContactData));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    saveOrderAction: (newOrder) => dispatch(actions.saveOrder(newOrder)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(ContactData));

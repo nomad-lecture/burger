@@ -33,3 +33,37 @@ export const loadOrdersError = (error) => {
     error,
   };
 };
+
+export const saveOrder = (newOrder) => {
+  return function (dispatch) {
+    dispatch(saveOrderStart());
+
+    axios
+      .post("orders.json", newOrder)
+      .then((response) => {
+        dispatch(saveOrderSuccess());
+      })
+      .catch((error) => {
+        dispatch(saveOrderError(error));
+      });
+  };
+};
+
+export const saveOrderStart = () => {
+  return {
+    type: "SAVE_ORDER_START",
+  };
+};
+
+export const saveOrderSuccess = () => {
+  return {
+    type: "SAVE_ORDER_SUCCESS",
+  };
+};
+
+export const saveOrderError = (error) => {
+  return {
+    type: "SAVE_ORDER_ERROR",
+    errorMessage: error,
+  };
+};
