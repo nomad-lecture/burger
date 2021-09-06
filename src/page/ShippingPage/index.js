@@ -16,6 +16,7 @@ class ShippingPage extends Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <div className={css.ShippingPage}>
         <p style={{ fontSize: "24px" }}>
@@ -46,7 +47,7 @@ class ShippingPage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    totalPrice: state.totalPrice,
+    totalPrice: state.burgerReducer.totalPrice,
   };
 };
 
