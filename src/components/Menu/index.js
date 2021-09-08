@@ -6,6 +6,7 @@ const Menu = () => {
   return (
     <div>
       <ul className={css.Menu}>
+        <MenuItem link="/login">Login</MenuItem>
         <MenuItem exact link="/">
           New Order
         </MenuItem>

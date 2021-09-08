@@ -7,6 +7,8 @@ import BurgerPage from "../BurgerPage";
 import SideBar from "../../components/SideBar";
 import OrderPage from "../OrderPage";
 import ShippingPage from "../ShippingPage";
+import LoginPage from "../LoginPage";
+import Signup from "../SignupPage";
 
 class App extends Component {
   state = {
@@ -31,6 +33,8 @@ class App extends Component {
           <Switch>
             <Route path="/shipping" component={ShippingPage} />
             <Route path="/orders" component={OrderPage} />
+            <Route path="/login" component={LoginPage} />
+            <Route path="/signup" component={Signup} />
             <Route path="/" component={BurgerPage} />
           </Switch>
         </main>
