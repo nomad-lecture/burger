@@ -20,8 +20,6 @@ const BuildControls = (props) => {
       {Object.keys(props.ingredientNames).map((el) => {
         return (
           <BuildControl
-            addEvent={props.addIngredient}
-            deleteEvent={props.removeIngredient}
             disabledIngredient={disabledIngredients[el]}
             type={el}
             ingredient={props.ingredientNames[el]}
@@ -50,12 +48,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addIngredient: (ingredient) => dispatch(actions.addIngredient(ingredient)),
-    removeIngredient: (ingredient) =>
-      dispatch(actions.removeIngredient(ingredient)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(BuildControls);
+export default connect(mapStateToProps)(BuildControls);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Button from "../../components/General/Button";
 import css from "./style.module.css";
@@ -11,18 +11,6 @@ const Signup = (props) => {
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
   const [error, setError] = useState("");
-
-  const changeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const changePassword1 = (e) => {
-    setPassword1(e.target.value);
-  };
-
-  const changePassword2 = (e) => {
-    setPassword2(e.target.value);
-  };
 
   const signup = () => {
     if (password1 === password2) {
@@ -37,26 +25,27 @@ const Signup = (props) => {
       {props.userId && <Redirect to="/" />}
       <h1>Login Form</h1>
       <div>Enter Your information</div>
-      <input type="text" placeholder="Email" onChange={changeEmail} />
+      <input
+        type="text"
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
       <input
         type="password"
         placeholder="Enter your password"
-        onChange={changePassword1}
+        onChange={(e) => setPassword1(e.target.value)}
       />
       <input
         type="password"
         placeholder="Re-Enter your password"
-        onChange={changePassword2}
+        onChange={(e) => setPassword2(e.target.value)}
       />
       {error && <div style={{ color: "red" }}>{error}</div>}
       {props.firebaseError && (
         <div style={{ color: "red" }}>{props.firebaseError}</div>
       )}
-      {props.saving ? (
-        <Spinner />
-      ) : (
-        <Button text="Register" btnType="Success" clicked={signup} />
-      )}
+      {props.saving && <Spinner />}
+      <Button text="Register" btnType="Success" clicked={signup} />
     </div>
   );
 };
