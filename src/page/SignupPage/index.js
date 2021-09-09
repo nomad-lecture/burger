@@ -36,7 +36,7 @@ export class Signup extends Component {
   render() {
     return (
       <div className={css.Signup}>
-        {this.props.userId && <Redirect to="/orders" />}
+        {this.props.userId && <Redirect to="/" />}
         <h1>Login Form</h1>
         <div>Enter Your information</div>
         <input type="text" placeholder="Email" onChange={this.changeEmail} />
@@ -68,9 +68,9 @@ export class Signup extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    saving: state.signupReducer.saving,
-    firebaseError: state.signupReducer.firebaseError,
-    userId: state.signupReducer.userId,
+    saving: state.signupLoginReducer.saving,
+    firebaseError: state.signupLoginReducer.firebaseError,
+    userId: state.signupLoginReducer.userId,
   };
 };
 
