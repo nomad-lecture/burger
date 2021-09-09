@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import Button from "../General/Button";
 import css from "./style.module.css";
@@ -11,6 +11,8 @@ const ContactData = (props) => {
   const [city, setCity] = useState(null);
   const [street, setStreet] = useState(null);
 
+  const priceRef = useRef();
+
   useEffect(() => {
     if (props.newOrderStatus.finished && !props.newOrderStatus.error) {
       props.history.replace("/orders");
@@ -22,6 +24,9 @@ const ContactData = (props) => {
   }, [props.newOrderStatus.finished]);
 
   const changeName = (e) => {
+    if (priceRef.current.style.color === "red")
+      priceRef.current.style.color = "green";
+    else priceRef.current.style.color = "red";
     setName(e.target.value);
   };
 
@@ -50,7 +55,11 @@ const ContactData = (props) => {
 
   return (
     <div className={css.ContactData}>
-      Total Price : {props.totalPrice}
+      <div ref={priceRef}>
+        <strong style={{ fontSize: "16px" }}>
+          Total Price : {props.totalPrice}
+        </strong>
+      </div>
       <div>
         {props.newOrderStatus.error &&
           `Order save process failed : ${props.newOrderStatus.error}`}

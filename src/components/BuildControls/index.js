@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import * as actions from "../../redux/actions/burgerActions";
 import css from "./style.module.css";
 import BuildControl from "../BuildControl";
 
