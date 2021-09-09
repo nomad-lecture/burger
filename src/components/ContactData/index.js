@@ -36,6 +36,7 @@ class ContactData extends Component {
 
   saveOrder = () => {
     const order = {
+      userId: this.props.userId,
       ingredients: this.props.ingredients,
       totalPrice: this.props.totalPrice,
       address: {
@@ -91,6 +92,7 @@ const mapStateToProps = (state) => {
     totalPrice: state.burgerReducer.totalPrice,
     ingredients: state.burgerReducer.ingredients,
     newOrderStatus: state.orderReducer.newOrderStatus,
+    userId: state.signupLoginReducer.userId,
   };
 };
 

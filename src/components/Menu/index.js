@@ -7,18 +7,20 @@ const Menu = (props) => {
   return (
     <div>
       <ul className={css.Menu}>
-        <MenuItem exact link="/">
-          New Order
-        </MenuItem>
         {props.userId ? (
-          <MenuItem link="/logout">Logout</MenuItem>
+          <Fragment>
+            <MenuItem exact link="/">
+              New Order
+            </MenuItem>
+            <MenuItem link="/orders">Orders</MenuItem>
+            <MenuItem link="/logout">Logout</MenuItem>
+          </Fragment>
         ) : (
           <Fragment>
             <MenuItem link="/login">Login</MenuItem>
             <MenuItem link="/signup">SignUp</MenuItem>
           </Fragment>
         )}
-        <MenuItem link="/orders">Orders</MenuItem>
       </ul>
     </div>
   );
