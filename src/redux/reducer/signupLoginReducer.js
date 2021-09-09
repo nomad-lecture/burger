@@ -20,8 +20,8 @@ const reducer = (state = initialState, action) => {
         ...state,
         saving: false,
         finished: true,
-        token: action.data.idToken,
-        userId: action.data.localId,
+        token: action.token,
+        userId: action.userId,
       };
     case "SIGNUP_USER_ERROR":
       return {
