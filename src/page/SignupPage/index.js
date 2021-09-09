@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import Button from "../../components/General/Button";
 import css from "./style.module.css";
 import * as actions from "../../redux/actions/signupActions";
-
+import Spinner from "../../components/General/Spinner";
+import { Redirect } from "react-router-dom";
 export class Signup extends Component {
   state = {
     email: "",
@@ -35,6 +36,7 @@ export class Signup extends Component {
   render() {
     return (
       <div className={css.Signup}>
+        {this.props.userId && <Redirect to="/orders" />}
         <h1>Login Form</h1>
         <div>Enter Your information</div>
         <input type="text" placeholder="Email" onChange={this.changeEmail} />
@@ -51,11 +53,26 @@ export class Signup extends Component {
         {this.state.error && (
           <div style={{ color: "red" }}>{this.state.error}</div>
         )}
-        <Button text="Register" btnType="Success" clicked={this.signup} />
+        {this.props.firebaseError && (
+          <div style={{ color: "red" }}>{this.props.firebaseError}</div>
+        )}
+        {this.props.saving ? (
+          <Spinner />
+        ) : (
+          <Button text="Register" btnType="Success" clicked={this.signup} />
+        )}
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    saving: state.signupReducer.saving,
+    firebaseError: state.signupReducer.firebaseError,
+    userId: state.signupReducer.userId,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -64,4 +81,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Signup);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

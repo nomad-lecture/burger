@@ -19,7 +19,7 @@ export const signupUser = (email, password) => {
         dispatch(signupUserSuccess(result.data));
       })
       .catch((err) => {
-        dispatch(signupUserSuccess(err));
+        dispatch(signupUserError(err));
       });
   };
 };
@@ -30,10 +30,10 @@ export const signupUserStart = () => {
   };
 };
 
-export const signupUserSuccess = (firebaseResultData) => {
+export const signupUserSuccess = (data) => {
   return {
     type: "SIGNUP_USER_SUCCESS",
-    firebaseResultData,
+    data,
   };
 };
 
