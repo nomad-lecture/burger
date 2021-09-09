@@ -16,7 +16,13 @@ export const loginUser = (email, password) => {
         data
       )
       .then((result) => {
-        dispatch(loginUserSuccess(result.data));
+        const token = result.data.idToken;
+        const userId = result.data.localId;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId);
+
+        dispatch(loginUserSuccess(token, userId));
       })
       .catch((err) => {
         dispatch(loginUserError(err));
@@ -30,10 +36,11 @@ export const loginUserStart = () => {
   };
 };
 
-export const loginUserSuccess = (data) => {
+export const loginUserSuccess = (token, userId) => {
   return {
     type: "LOGIN_USER_SUCCESS",
-    data,
+    token,
+    userId,
   };
 };
 
@@ -45,6 +52,8 @@ export const loginUserError = (error) => {
 };
 
 export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("userId");
   return {
     type: "LOGOUT",
   };

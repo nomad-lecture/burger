@@ -10,6 +10,7 @@ import ShippingPage from "../ShippingPage";
 import LoginPage from "../LoginPage";
 import Signup from "../SignupPage";
 import Logout from "../../components/Logout";
+import * as loginActions from "../../redux/actions/loginActions";
 class App extends Component {
   state = {
     showSidebar: false,
@@ -19,6 +20,15 @@ class App extends Component {
     this.setState((prevState) => {
       return { showSidebar: !prevState.showSidebar };
     });
+  };
+
+  componentDidMount = () => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    if (token && userId) {
+      this.props.autoLogin(token, userId);
+    }
   };
 
   render() {
@@ -57,4 +67,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    autoLogin: (token, userId) =>
+      dispatch(loginActions.loginUserSuccess(token, userId)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
