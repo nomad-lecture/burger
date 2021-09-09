@@ -1,51 +1,35 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Burger from "../../components/Burger";
 import BuildControls from "../../components/BuildControls";
 import Modal from "../../components/General/Modal";
 import OrderSummery from "../../components/OrderSummery";
 
-import Spinner from "../../components/General/Spinner";
+const BurgerPage = (props) => {
+  const [confirmOrder, setConfirmOrder] = useState(false);
 
-class BurgerPage extends Component {
-  state = {
-    confirmOrder: false,
-    loading: false,
+  const continueOrder = () => {
+    props.history.push("/shipping");
   };
 
-  showConfirmModal = () => {
-    this.setState({ confirmOrder: true });
+  const showConfirmModal = () => {
+    setConfirmOrder(true);
   };
 
-  closeConfirmModal = () => {
-    this.setState({ confirmOrder: false });
+  const closeConfirmModal = () => {
+    setConfirmOrder(false);
   };
 
-  continueOrder = () => {
-    this.props.history.push("/shipping");
-  };
+  return (
+    <div>
+      <Modal closeConfirmModal={closeConfirmModal} show={confirmOrder}>
+        <OrderSummery onCancel={closeConfirmModal} onContinue={continueOrder} />
+      </Modal>
 
-  render() {
-    return (
-      <div>
-        <Modal
-          closeConfirmModal={this.closeConfirmModal}
-          show={this.state.confirmOrder}
-        >
-          {this.state.loading ? (
-            <Spinner />
-          ) : (
-            <OrderSummery
-              onCancel={this.closeConfirmModal}
-              onContinue={this.continueOrder}
-            />
-          )}
-        </Modal>
-        {this.state.loading && <Spinner />}
-        <Burger />
-        <BuildControls showConfirmModal={this.showConfirmModal} />
-      </div>
-    );
-  }
-}
+      <Burger />
+
+      <BuildControls showConfirmModal={showConfirmModal} />
+    </div>
+  );
+};
 
 export default BurgerPage;
