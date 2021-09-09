@@ -1,12 +1,15 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import Button from "../../components/General/Button";
 import css from "./style.module.css";
+import * as actions from "../../redux/actions/signupActions";
 
 export class Signup extends Component {
   state = {
     email: "",
     password1: "",
     password2: "",
+    error: "",
   };
 
   changeEmail = (e) => {
@@ -22,14 +25,11 @@ export class Signup extends Component {
   };
 
   signup = () => {
-    alert(
-      "Sign Up ..." +
-        this.state.email +
-        "...." +
-        this.state.password1 +
-        " ... " +
-        this.state.password2
-    );
+    if (this.state.password1 === this.state.password2) {
+      this.props.signupUser(this.state.email, this.state.password1);
+    } else {
+      this.setState({ error: "Password does not match" });
+    }
   };
 
   render() {
@@ -48,10 +48,20 @@ export class Signup extends Component {
           placeholder="Re-Enter your password"
           onChange={this.changePassword2}
         />
+        {this.state.error && (
+          <div style={{ color: "red" }}>{this.state.error}</div>
+        )}
         <Button text="Register" btnType="Success" clicked={this.signup} />
       </div>
     );
   }
 }
 
-export default Signup;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signupUser: (email, password) =>
+      dispatch(actions.signupUser(email, password)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Signup);

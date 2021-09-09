@@ -4,7 +4,7 @@ import Button from "../General/Button";
 import css from "./style.module.css";
 import Spinner from "../General/Spinner";
 import { withRouter } from "react-router-dom";
-import * as actions from "../../redux/actions/orderAction";
+import * as actions from "../../redux/actions/orderActions";
 
 class ContactData extends Component {
   state = {

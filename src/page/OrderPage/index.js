@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 // import css from "./style.module.css";
 import Spinner from "../../components/General/Spinner";
 import Order from "../../components/Order";
-import * as actions from "../../redux/actions/orderAction";
+import * as actions from "../../redux/actions/orderActions";
 
 class OrderPage extends Component {
   componentDidMount() {
