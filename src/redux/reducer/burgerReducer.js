@@ -44,6 +44,8 @@ const reducer = (state = initialState, action) => {
       totalPrice: newPrice,
       purchasing: newPrice > 0,
     };
+  } else if (action.type === "CLEAR_ORDER") {
+    return initialState;
   }
 
   return state;

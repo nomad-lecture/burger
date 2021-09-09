@@ -65,6 +65,16 @@ const reducer = (state = initialState, action) => {
         },
       };
 
+    case "CLEAR_ORDER":
+      return {
+        ...state,
+        newOrderStatus: {
+          saving: false,
+          finished: false,
+          error: null,
+        },
+      };
+
     default:
       return state;
   }
