@@ -16,9 +16,7 @@ const App = (props) => {
   const [showSidebar, setShowSidebar] = useState(false);
 
   const toggleSideBar = () => {
-    setShowSidebar((prevShowSidebar) => {
-      return { showSidebar: !prevShowSidebar.showSidebar };
-    });
+    setShowSidebar((prevShowSidebar) => !prevShowSidebar);
   };
 
   useEffect(() => {

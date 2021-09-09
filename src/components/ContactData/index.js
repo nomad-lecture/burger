@@ -12,13 +12,11 @@ const ContactData = (props) => {
   const [street, setStreet] = useState(null);
 
   useEffect(() => {
-    console.log("contact data effect");
     if (props.newOrderStatus.finished && !props.newOrderStatus.error) {
       props.history.replace("/orders");
     }
 
     return () => {
-      console.log("order clearing .... ");
       props.clearOrder();
     };
   }, [props.newOrderStatus.finished]);
