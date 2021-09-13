@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { connect } from "react-redux";
 import css from "./style.module.css";
+import BurgerContext from "../../context/BurgerContext";
 
 import * as actions from "../../redux/actions/burgerActions";
 
 const BuildControl = (props) => {
+  const appData = useContext(BurgerContext);
+  console.log("======================", BurgerContext);
   return (
     <div className={css.BuildControl}>
       <div className={css.Label}>{props.ingredient}</div>
@@ -19,7 +22,7 @@ const BuildControl = (props) => {
         className={css.More}
         onClick={() => props.addIngredient(props.type)}
       >
-        Add
+        Add {appData}
       </button>
     </div>
   );
