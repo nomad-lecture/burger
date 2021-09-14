@@ -8,7 +8,7 @@ import ShippingPage from "../ShippingPage";
 import LoginPage from "../LoginPage";
 import Logout from "../../components/Logout";
 import * as loginActions from "../../redux/actions/loginActions";
-import BurgerContext from "../../context/BurgerContext";
+import { BurgerStore } from "../../context/BurgerContext";
 
 const BurgerPage = React.lazy(() => {
   return import("../BurgerPage");
@@ -54,14 +54,13 @@ const App = (props) => {
         <Suspense fallback={<div> Wait please </div>}>
           {props.userId ? (
             <Switch>
-              <Route path="/shipping" component={ShippingPage} />
-              <Route path="/orders" component={OrderPage} />
               <Route path="/logout" component={Logout} />
-              <Route path="/">
-                <BurgerContext.Provider value={"" + showSidebar}>
-                  <BurgerPage />
-                </BurgerContext.Provider>
-              </Route>
+              <Route path="/orders" component={OrderPage} />
+
+              <BurgerStore>
+                <Route path="/shipping" component={ShippingPage} />
+                <Route path="/" component={BurgerPage} />
+              </BurgerStore>
             </Switch>
           ) : (
             <Switch>

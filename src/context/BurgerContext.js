@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import OrderPage from "../page/OrderPage";
 import ShippingPage from "../page/ShippingPage";
 
@@ -13,16 +13,22 @@ export const BurgerStore = (props) => {
   });
 
   const addIngredient = (ingredient) => {
-    console.log("add ...");
+    setIngredients({
+      ...ingredients,
+      [ingredient]: ingredients[ingredient] + 1,
+    });
   };
 
   const removeIngredient = (ingredient) => {
-    console.log("remove ...");
+    setIngredients({
+      ...ingredients,
+      [ingredient]: ingredients[ingredient] - 1,
+    });
   };
 
   return (
     <BurgerContext.Provider
-      value={(ingredients, addIngredient, removeIngredient)}
+      value={{ ingredients, addIngredient, removeIngredient }}
     >
       {props.children}
     </BurgerContext.Provider>
