@@ -1,21 +1,23 @@
-import React from "react";
-import { connect } from "react-redux";
-
+import React, { useContext } from "react";
+import BurgerContext from "../../context/BurgerContext";
 import Button from "../General/Button";
 
 const OrderSummery = (props) => {
+  const burgerContext = useContext(BurgerContext);
+
   return (
     <div>
       <h3>Your Order</h3>
       <p>your chosen ingredients</p>
       <ul>
-        {Object.keys(props.ingredients).map((el) => (
+        {Object.keys(burgerContext.burger.ingredients).map((el) => (
           <li key={el}>
-            {props.ingredientNames[el]} : {props.ingredients[el]}
+            {burgerContext.burger.ingredientNames[el]} :{" "}
+            {burgerContext.burger.ingredients[el]}
           </li>
         ))}
       </ul>
-      <strong>Your Total Price : {props.totalPrice} MNT </strong>
+      <strong>Your Total Price : {burgerContext.burger.totalPrice} MNT </strong>
       <p>go to next step ?</p>
       <Button clicked={props.onCancel} btnType="Danger" text="Decline" />
       <Button clicked={props.onContinue} btnType="Success" text="Continue" />
@@ -23,12 +25,4 @@ const OrderSummery = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    ingredients: state.burgerReducer.ingredients,
-    ingredientNames: state.burgerReducer.ingredientNames,
-    totalPrice: state.burgerReducer.totalPrice,
-  };
-};
-
-export default connect(mapStateToProps)(OrderSummery);
+export default OrderSummery;

@@ -8,7 +8,7 @@ const Burger = () => {
 
   let content = [];
 
-  const items = Object.entries(burgerContext.ingredients);
+  const items = Object.entries(burgerContext.burger.ingredients);
 
   items.map((el) => {
     for (let i = 0; i < el[1]; i++)
