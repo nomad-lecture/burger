@@ -16,6 +16,23 @@ const initialState = {
 export const UserStore = (props) => {
   const [state, setState] = useState(initialState);
 
+  const loginUserSuccess = (userId, token, expireDate, refreshToken) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("userId", userId);
+    localStorage.setItem("expireDate", expireDate);
+    localStorage.setItem("refreshToken", refreshToken);
+
+    setState({
+      ...state,
+      logginIn: false,
+      userId,
+      token,
+      error: null,
+      errorCode: null,
+      expireDate,
+    });
+  };
+
   const signUpUser = (email, password) => {
     setState({ ...state, saving: true });
 
@@ -77,20 +94,7 @@ export const UserStore = (props) => {
         const expireDate = new Date(new Date().getTime() + expiresIn * 1000);
         const refreshToken = result.data.refreshToken;
 
-        localStorage.setItem("token", token);
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("expireDate", expireDate);
-        localStorage.setItem("refreshToken", refreshToken);
-
-        setState({
-          ...state,
-          logginIn: false,
-          userId,
-          token,
-          error: null,
-          errorCode: null,
-          expireDate,
-        });
+        loginUserSuccess(userId, token, expireDate, refreshToken);
 
         // dispatch(autoLogoutAfterMillisec(expiresIn * 1000));
       })
@@ -114,7 +118,9 @@ export const UserStore = (props) => {
   };
 
   return (
-    <Context.Provider value={{ state, signUpUser, loginUser, logoutUser }}>
+    <Context.Provider
+      value={{ state, signUpUser, loginUser, logoutUser, loginUserSuccess }}
+    >
       {props.children}
     </Context.Provider>
   );

@@ -29,22 +29,23 @@ const App = (props) => {
     setShowSidebar((prevShowSidebar) => !prevShowSidebar);
   };
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   const userId = localStorage.getItem("userId");
-  //   const expireDate = new Date(localStorage.getItem("expireDate"));
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const expireDate = new Date(localStorage.getItem("expireDate"));
+    const refreshToken = localStorage.getItem("refreshToken");
 
-  //   if (token && userId) {
-  //     if (expireDate > new Date()) {
-  //       props.autoLogin(token, userId);
-  //       props.autoLogoutAfterMillisec(
-  //         expireDate.getTime() - new Date().getTime()
-  //       );
-  //     } else {
-  //       props.logout();
-  //     }
-  //   }
-  // }, []);
+    if (token && userId) {
+      if (expireDate > new Date()) {
+        userCtx.loginUserSuccess(token, userId, expireDate, refreshToken);
+        // props.autoLogoutAfterMillisec(
+        //   expireDate.getTime() - new Date().getTime()
+        // );
+      } else {
+        userCtx.logoutUser();
+      }
+    }
+  }, []);
 
   return (
     <div>
