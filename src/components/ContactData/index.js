@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import Button from "../General/Button";
 import css from "./style.module.css";
 import Spinner from "../General/Spinner";
-import { withRouter } from "react-router-dom";
 import BurgerContext from "../../context/BurgerContext";
 
 const ContactData = (props) => {
+  const history = useHistory();
   const [name, setName] = useState(null);
   const [city, setCity] = useState(null);
   const [street, setStreet] = useState(null);
@@ -16,7 +17,7 @@ const ContactData = (props) => {
 
   useEffect(() => {
     if (ctx.burger.finished && !ctx.burger.error) {
-      props.history.replace("/orders");
+      history.replace("/orders");
     }
     return () => {
       ctx.clearBurger();
@@ -92,4 +93,4 @@ const ContactData = (props) => {
   );
 };
 
-export default withRouter(ContactData);
+export default ContactData;
