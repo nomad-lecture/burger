@@ -1,27 +1,27 @@
-import React, { useState, useEffect, useRef } from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Button from "../General/Button";
 import css from "./style.module.css";
 import Spinner from "../General/Spinner";
 import { withRouter } from "react-router-dom";
-import * as actions from "../../redux/actions/orderActions";
+import BurgerContext from "../../context/BurgerContext";
 
 const ContactData = (props) => {
   const [name, setName] = useState(null);
   const [city, setCity] = useState(null);
   const [street, setStreet] = useState(null);
 
+  const ctx = useContext(BurgerContext);
+
   const priceRef = useRef();
 
   useEffect(() => {
-    if (props.newOrderStatus.finished && !props.newOrderStatus.error) {
+    if (ctx.burger.finished && !ctx.burger.error) {
       props.history.replace("/orders");
     }
-
     return () => {
-      props.clearOrder();
+      ctx.clearBurger();
     };
-  }, [props.newOrderStatus.finished]);
+  }, [ctx.burger.finished]);
 
   const changeName = (e) => {
     if (priceRef.current.style.color === "red")
@@ -41,8 +41,8 @@ const ContactData = (props) => {
   const saveOrder = () => {
     const order = {
       userId: props.userId,
-      ingredients: props.ingredients,
-      totalPrice: props.totalPrice,
+      ingredients: ctx.burger.ingredients,
+      totalPrice: ctx.burger.totalPrice,
       address: {
         name,
         city,
@@ -50,21 +50,20 @@ const ContactData = (props) => {
       },
     };
 
-    props.saveOrderAction(order);
+    ctx.saveBurger(order);
   };
 
   return (
     <div className={css.ContactData}>
       <div ref={priceRef}>
         <strong style={{ fontSize: "16px" }}>
-          Total Price : {props.totalPrice}
+          Total Price : {ctx.burger.totalPrice}
         </strong>
       </div>
       <div>
-        {props.newOrderStatus.error &&
-          `Order save process failed : ${props.newOrderStatus.error}`}
+        {ctx.burger.error && `Order save process failed : ${ctx.burger.error}`}
       </div>
-      {props.newOrderStatus.saving ? (
+      {ctx.burger.saving ? (
         <Spinner />
       ) : (
         <div>
@@ -93,23 +92,4 @@ const ContactData = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    totalPrice: state.burgerReducer.totalPrice,
-    ingredients: state.burgerReducer.ingredients,
-    newOrderStatus: state.orderReducer.newOrderStatus,
-    userId: state.signupLoginReducer.userId,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    saveOrderAction: (newOrder) => dispatch(actions.saveOrder(newOrder)),
-    clearOrder: () => dispatch(actions.clearOrder()),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(ContactData));
+export default withRouter(ContactData);

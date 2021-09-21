@@ -1,12 +1,14 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useContext } from "react";
 import Burger from "../../components/Burger";
 import Button from "../../components/General/Button";
 import css from "./style.module.css";
 import { Route } from "react-router-dom";
 import ContactData from "../../components/ContactData";
+import BurgerContext from "../../context/BurgerContext";
 
 const ShippingPage = (props) => {
+  const ctx = useContext(BurgerContext);
+
   const goBack = () => {
     props.history.goBack();
   };
@@ -21,7 +23,7 @@ const ShippingPage = (props) => {
         <strong> Your Order </strong>
       </p>
       <p style={{ fontSize: "24px" }}>
-        <strong>Total Price: {props.totalPrice}</strong>
+        <strong>Total Price: {ctx.burger.totalPrice}</strong>
       </p>
       <Burger />
       <Button clicked={goBack} btnType="Danger" text="Decline shipping" />
@@ -38,10 +40,4 @@ const ShippingPage = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    totalPrice: state.burgerReducer.totalPrice,
-  };
-};
-
-export default connect(mapStateToProps)(ShippingPage);
+export default ShippingPage;

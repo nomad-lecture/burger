@@ -51,25 +51,25 @@ const App = (props) => {
       <Toolbar toggleSideBar={toggleSideBar} />
       <SideBar showSidebar={showSidebar} toggleSideBar={toggleSideBar} />
       <main className={css.Content}>
-        <Suspense fallback={<div> Wait please </div>}>
-          {props.userId ? (
-            <Switch>
-              <Route path="/logout" component={Logout} />
-              <Route path="/orders" component={OrderPage} />
+        <BurgerStore>
+          <Suspense fallback={<div> Wait please </div>}>
+            {props.userId ? (
+              <Switch>
+                <Route path="/logout" component={Logout} />
+                <Route path="/orders" component={OrderPage} />
 
-              <BurgerStore>
                 <Route path="/shipping" component={ShippingPage} />
                 <Route path="/" component={BurgerPage} />
-              </BurgerStore>
-            </Switch>
-          ) : (
-            <Switch>
-              <Route path="/login" component={LoginPage} />
-              <Route path="/signup" component={SignupPage} />
-              <Redirect to="/login" />
-            </Switch>
-          )}
-        </Suspense>
+              </Switch>
+            ) : (
+              <Switch>
+                <Route path="/login" component={LoginPage} />
+                <Route path="/signup" component={SignupPage} />
+                <Redirect to="/login" />
+              </Switch>
+            )}
+          </Suspense>
+        </BurgerStore>
       </main>
     </div>
   );
