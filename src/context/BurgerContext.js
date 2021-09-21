@@ -34,6 +34,10 @@ const INGERIENT_PRICES = {
 export const BurgerStore = (props) => {
   const [burger, setBurger] = useState(initialState);
 
+  const toggleSaving = () => {
+    setBurger({ ...burger, saving: !burger.saving });
+  };
+
   const saveBurger = (newOrder, token) => {
     setBurger({ ...burger, saving: true });
     axios
@@ -83,6 +87,7 @@ export const BurgerStore = (props) => {
         removeIngredient,
         saveBurger,
         clearBurger,
+        toggleSaving,
       }}
     >
       {props.children}
