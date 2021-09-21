@@ -38,11 +38,11 @@ const App = (props) => {
     if (token && userId) {
       if (expireDate > new Date()) {
         userCtx.loginUserSuccess(token, userId, expireDate, refreshToken);
-        // props.autoLogoutAfterMillisec(
-        //   expireDate.getTime() - new Date().getTime()
-        // );
+        userCtx.autoRenewTokenAfterMillisec(
+          expireDate.getTime() - new Date().getTime()
+        );
       } else {
-        userCtx.logoutUser();
+        userCtx.autoRenewTokenAfterMillisec(3600 * 1000);
       }
     }
   }, []);

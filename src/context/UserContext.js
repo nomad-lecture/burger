@@ -33,6 +33,41 @@ export const UserStore = (props) => {
     });
   };
 
+  const autoRenewTokenAfterMillisec = (ms) => {
+    axios
+      .post(
+        "https://securetoken.googleapis.com/v1/token?key=AIzaSyBynCwZZ2y9ytKQOlon2_FODGqvu55jN44",
+        {
+          grant_type: "refresh_token",
+          refresh_token: localStorage.getItem("refreshToken"),
+        }
+      )
+      .then((result) => {
+        const token = result.data.id_token;
+        const userId = result.data.user_id;
+        const expiresIn = result.data.expires_in;
+        const expireDate = new Date(new Date().getTime() + expiresIn * 1000);
+        const refreshToken = result.data.refresh_token;
+
+        loginUserSuccess(userId, token, expireDate, refreshToken);
+      })
+      .catch((err) => {
+        setState({
+          ...state,
+          logginIn: false,
+          error: err.message,
+          errorCode: err.code,
+          token: null,
+          userId: null,
+          expireDate: null,
+        });
+      });
+
+    setTimeout(() => {
+      autoRenewTokenAfterMillisec(3600 * 1000);
+    }, ms);
+  };
+
   const signUpUser = (email, password) => {
     setState({ ...state, saving: true });
 
@@ -104,6 +139,9 @@ export const UserStore = (props) => {
           logginIn: false,
           error: err.message,
           errorCode: err.code,
+          token: null,
+          userId: null,
+          expireDate: null,
         });
       });
   };
@@ -119,7 +157,14 @@ export const UserStore = (props) => {
 
   return (
     <Context.Provider
-      value={{ state, signUpUser, loginUser, logoutUser, loginUserSuccess }}
+      value={{
+        state,
+        signUpUser,
+        loginUser,
+        logoutUser,
+        loginUserSuccess,
+        autoRenewTokenAfterMillisec,
+      }}
     >
       {props.children}
     </Context.Provider>

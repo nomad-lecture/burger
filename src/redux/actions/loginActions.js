@@ -75,7 +75,7 @@ export const autoLogoutAfterMillisec = (ms) => {
       .post(
         "https://securetoken.googleapis.com/v1/token?key=AIzaSyBynCwZZ2y9ytKQOlon2_FODGqvu55jN44",
         {
-          grand_type: "refresh_token",
+          grant_type: "refresh_token",
           refresh_token: localStorage.getItem("refreshToken"),
         }
       )
