@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import Button from "../../components/General/Button";
 import css from "./style.module.css";
-import * as actions from "../../redux/actions/loginActions";
 import Spinner from "../../components/General/Spinner";
+import UserContext from "../../context/UserContext";
 
 const Login = (props) => {
+  const ctx = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,23 +19,23 @@ const Login = (props) => {
   };
 
   const login = () => {
-    props.login(email, password);
+    ctx.loginUser(email, password);
   };
   return (
     <div className={css.Login}>
-      {props.userId && <Redirect to="/orders" />}
+      {ctx.state.userId && <Redirect to="/orders" />}
       <input type="text" placeholder="Email" onChange={changeEmail} />
       <input
         type="password"
         placeholder="Enter your password"
         onChange={changePassword}
       />
-      {props.firebaseError && (
+      {ctx.state.error && (
         <div style={{ color: "red" }}>
-          {props.firebaseError} | {props.firebaseErrorCode}
+          {ctx.state.error} | {ctx.state.errorCode}
         </div>
       )}
-      {props.logginIn ? (
+      {ctx.state.logginIn ? (
         <Spinner />
       ) : (
         <Button text="Login" btnType="Success" clicked={login} />
@@ -44,19 +44,4 @@ const Login = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    logginIn: state.signupLoginReducer.logginIn,
-    firebaseError: state.signupLoginReducer.firebaseError,
-    firebaseErrorCode: state.signupLoginReducer.firebaseErrorCode,
-    userId: state.signupLoginReducer.userId,
-  };
-};
-
-const mapDipatchToProps = (dispatch) => {
-  return {
-    login: (email, password) => dispatch(actions.loginUser(email, password)),
-  };
-};
-
-export default connect(mapStateToProps, mapDipatchToProps)(Login);
+export default Login;

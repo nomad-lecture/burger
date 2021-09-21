@@ -8,8 +8,9 @@ const initialState = {
   token: null,
   userId: null,
   logginIn: false,
-  errorCode: "",
-  error: "",
+  errorCode: null,
+  error: null,
+  expireDate: null,
 };
 
 export const UserStore = (props) => {
@@ -55,8 +56,65 @@ export const UserStore = (props) => {
       });
   };
 
+  const loginUser = (email, password) => {
+    setState({ ...state, logginIn: true });
+
+    const data = {
+      email,
+      password,
+      returnSecureToken: true,
+    };
+
+    axios
+      .post(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBynCwZZ2y9ytKQOlon2_FODGqvu55jN44",
+        data
+      )
+      .then((result) => {
+        const token = result.data.idToken;
+        const userId = result.data.localId;
+        const expiresIn = result.data.expiresIn;
+        const expireDate = new Date(new Date().getTime() + expiresIn * 1000);
+        const refreshToken = result.data.refreshToken;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("expireDate", expireDate);
+        localStorage.setItem("refreshToken", refreshToken);
+
+        setState({
+          ...state,
+          logginIn: false,
+          userId,
+          token,
+          error: null,
+          errorCode: null,
+          expireDate,
+        });
+
+        // dispatch(autoLogoutAfterMillisec(expiresIn * 1000));
+      })
+      .catch((err) => {
+        setState({
+          ...state,
+          logginIn: false,
+          error: err.message,
+          errorCode: err.code,
+        });
+      });
+  };
+
+  const logoutUser = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("expireDate");
+    localStorage.removeItem("refreshToken");
+
+    setState({ initialState });
+  };
+
   return (
-    <Context.Provider value={{ state, signUpUser }}>
+    <Context.Provider value={{ state, signUpUser, loginUser, logoutUser }}>
       {props.children}
     </Context.Provider>
   );
