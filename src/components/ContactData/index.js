@@ -4,6 +4,7 @@ import Button from "../General/Button";
 import css from "./style.module.css";
 import Spinner from "../General/Spinner";
 import BurgerContext from "../../context/BurgerContext";
+import UserContext from "../../context/UserContext";
 
 const ContactData = (props) => {
   const history = useHistory();
@@ -12,6 +13,7 @@ const ContactData = (props) => {
   const [street, setStreet] = useState(null);
 
   const ctx = useContext(BurgerContext);
+  const userCtx = useContext(UserContext);
 
   const priceRef = useRef();
 
@@ -41,7 +43,7 @@ const ContactData = (props) => {
 
   const saveOrder = () => {
     const order = {
-      userId: props.userId,
+      userId: userCtx.state.userId,
       ingredients: ctx.burger.ingredients,
       totalPrice: ctx.burger.totalPrice,
       address: {
@@ -51,7 +53,7 @@ const ContactData = (props) => {
       },
     };
 
-    ctx.saveBurger(order);
+    ctx.saveBurger(order, userCtx.state.token);
   };
 
   return (

@@ -12,13 +12,11 @@ const initialState = {
 export const OrdersStore = (props) => {
   const [state, setState] = useState(initialState);
 
-  const loadOrders = (userId) => {
+  const loadOrders = (userId, token) => {
     setState({ ...state, loading: true });
 
-    // const token = getState().signupLoginReducer.token;
-    // orders.json?auth=${token}&orderBy="userId"&equalTo="${userId}
     axios
-      .get(`orders.json`)
+      .get(`orders.json?auth=${token}&orderBy="userId"&equalTo="${userId}"`)
       .then((response) => {
         const orders = Object.entries(response.data).reverse();
         setState({ ...state, orders, loading: false, error: null });

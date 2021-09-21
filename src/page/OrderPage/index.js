@@ -3,13 +3,15 @@ import React, { useEffect, useContext } from "react";
 import Spinner from "../../components/General/Spinner";
 import Order from "../../components/Order";
 import OrdersContext from "../../context/OrdersContext";
+import UserContext from "../../context/UserContext";
 
 const OrderPage = (props) => {
-  useEffect(() => {
-    ctx.loadOrders(props.userId);
-  }, []);
-
   const ctx = useContext(OrdersContext);
+  const userCtx = useContext(UserContext);
+
+  useEffect(() => {
+    ctx.loadOrders(userCtx.state.userId, userCtx.state.token);
+  }, []);
 
   return (
     <div>
